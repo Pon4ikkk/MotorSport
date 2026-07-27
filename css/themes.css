@@ -1,0 +1,468 @@
+
+/* --------------------------------------------------------------------
+   1) HOMEPAGE — pure black, text-only hero, nothing else
+--------------------------------------------------------------------- */
+body[data-page="home"] {
+  background: var(--c-black);
+}
+body[data-page="home"] .hero {
+  background: var(--c-black);
+}
+/* No glow, no dot texture, no gradients behind the text — solid black. */
+body[data-page="home"] .hero::before,
+body[data-page="home"] .hero::after {
+  content: none;
+}
+
+/* --------------------------------------------------------------------
+   2) WELCOME GREETING — shown once per visit, on the homepage only
+--------------------------------------------------------------------- */
+#welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 4500;
+  background: var(--c-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .9s var(--ease-out);
+}
+#welcome.show { opacity: 1; pointer-events: auto; }
+#welcome.done { opacity: 0; pointer-events: none; }
+.welcome-inner { text-align: center; padding: 0 24px; }
+.welcome-hello {
+  font-family: var(--f-mono);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  font-size: .78rem;
+  color: var(--c-gray-300);
+  margin-bottom: 14px;
+}
+.welcome-text {
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(1.5rem, 4.5vw, 2.8rem);
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  color: var(--c-white);
+}
+.welcome-text span { color: var(--c-red); }
+
+/* --------------------------------------------------------------------
+   3) MODAL SYSTEM — powers every "Детальніше" button on the site
+--------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  background: rgba(5, 5, 6, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s var(--ease-out), visibility .35s var(--ease-out);
+}
+.modal-overlay.open { opacity: 1; visibility: visible; }
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: 84vh;
+  overflow-y: auto;
+  background: linear-gradient(160deg, var(--c-gray-900), var(--c-black-soft));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lift);
+  padding: 44px 40px;
+  transform: translateY(30px) scale(.97);
+  transition: transform .4s var(--ease-out);
+}
+.modal-overlay.open .modal-panel { transform: translateY(0) scale(1); }
+.modal-close {
+  position: absolute;
+  top: 18px; right: 18px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,.04);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  color: var(--c-white);
+  transition: border-color .25s, transform .25s;
+}
+.modal-close:hover { border-color: var(--c-red); transform: rotate(90deg); }
+.modal-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(232,18,28,.14);
+  color: var(--c-red);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.modal-title {
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  line-height: 1.05;
+}
+.modal-subtitle {
+  margin-top: 8px;
+  color: var(--c-gray-300);
+  font-size: .92rem;
+}
+.modal-body { margin-top: 26px; }
+.modal-body p {
+  color: var(--c-gray-300);
+  font-size: .95rem;
+  margin-bottom: 14px;
+}
+.modal-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 22px 0;
+}
+.modal-stat {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--glass-border);
+}
+.modal-stat b {
+  display: block;
+  font-family: var(--f-display);
+  font-size: 1.05rem;
+  color: var(--c-yellow);
+  margin-bottom: 2px;
+}
+.modal-stat span { font-size: .74rem; color: var(--c-gray-500); text-transform: uppercase; letter-spacing: .04em; }
+.modal-facts { margin-top: 8px; }
+.modal-facts li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 10px;
+  color: var(--c-gray-300);
+  font-size: .9rem;
+}
+.modal-facts li::before {
+  content: "▸";
+  position: absolute; left: 0; top: 0;
+  color: var(--c-red);
+}
+.modal-timeline { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.modal-timeline-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--glass-border);
+  font-size: .88rem;
+  color: var(--c-gray-300);
+}
+.modal-timeline-item:last-child { border-bottom: none; }
+.modal-timeline-year {
+  font-family: var(--f-mono);
+  color: var(--c-yellow);
+  font-weight: 700;
+  min-width: 52px;
+}
+@media (max-width: 560px) {
+  .modal-panel { padding: 32px 22px; }
+  .modal-stats { grid-template-columns: 1fr; }
+}
+
+/* Cards that open a modal get a pointer cursor + a visible action row */
+.card-action, .js-modal-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,.03);
+  color: var(--c-white);
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  transition: border-color .25s, background .25s, transform .25s;
+}
+.card-action:hover { border-color: var(--c-red); background: rgba(232,18,28,.1); transform: translateY(-2px); }
+
+/* --------------------------------------------------------------------
+   4) PER-CHAMPIONSHIP THEMES
+   Each theme sets --accent (recolors eyebrow, links, stat numbers,
+   timeline dots, hover glow, CTA gradient) and adds a unique
+   background pattern + typographic personality to its page-hero.
+--------------------------------------------------------------------- */
+
+/* Generic accent plumbing — applies to any themed page */
+body[data-theme] .eyebrow,
+body[data-theme] .page-hero-tag,
+body[data-theme] .card-link,
+body[data-theme] .breadcrumb a:hover,
+body[data-theme] .track-country { color: var(--accent); }
+body[data-theme] .eyebrow::before { background: var(--accent); box-shadow: none; }
+body[data-theme] .timeline-item::before { background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+body[data-theme] .stat-num { background: linear-gradient(120deg, var(--accent), var(--c-white) 140%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+body[data-theme] .btn-primary { background: linear-gradient(120deg, var(--accent), var(--c-yellow)); box-shadow: none; }
+body[data-theme] .card:hover, body[data-theme] .team-card:hover, body[data-theme] .driver-card:hover { border-color: var(--accent); }
+body[data-theme] .modal-badge { background: rgba(255,255,255,.06); color: var(--accent); }
+body[data-theme] .modal-facts li::before { color: var(--accent); }
+
+/* Hero decorative layers, shared skeleton */
+.page-hero { isolation: isolate; }
+.page-hero-media { z-index: 0; }
+.hero-pattern {
+  position: absolute; inset: 0; z-index: 1;
+  pointer-events: none;
+  opacity: .5;
+}
+.hero-ghost {
+  position: absolute;
+  z-index: 1;
+  font-family: var(--f-display);
+  font-weight: 900;
+  line-height: .8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,.09);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.page-hero-content { z-index: 2; }
+
+/* ---- Formula 1 — "split" / racing stripes / italic dynamic ---- */
+body[data-theme="formula1"] { --accent: var(--c-red); }
+body[data-theme="formula1"] .hero-pattern { background: repeating-linear-gradient(38deg, var(--accent) 0 5px, transparent 5px 42px); opacity: .16; }
+body[data-theme="formula1"] .hero-ghost { right: -2%; bottom: -6%; font-size: 22vw; transform: skewX(-8deg); }
+body[data-theme="formula1"] .page-hero-title { transform: skewX(-3deg); letter-spacing: -.03em; }
+body[data-theme="formula1"] .page-hero-tag { border-left: 3px solid var(--accent); padding-left: 12px; }
+
+/* ---- Formula E — "circuit" / PCB traces / wide tech tracking ---- */
+body[data-theme="formula-e"] { --accent: var(--c-green); }
+body[data-theme="formula-e"] .hero-pattern {
+  background:
+    repeating-linear-gradient(0deg, var(--accent) 0 2px, transparent 2px 64px),
+    repeating-linear-gradient(90deg, var(--accent) 0 2px, transparent 2px 64px);
+  opacity: .14;
+}
+body[data-theme="formula-e"] .hero-ghost { right: 2%; top: -4%; font-size: 26vw; }
+body[data-theme="formula-e"] .page-hero-title { letter-spacing: .04em; font-size: clamp(2.1rem, 6vw, 4.6rem); }
+body[data-theme="formula-e"] .page-hero-tag { font-family: var(--f-mono); }
+body[data-theme="formula-e"] .card, body[data-theme="formula-e"] .driver-card, body[data-theme="formula-e"] .team-card { border-radius: 4px 22px 4px 22px; }
+
+/* ---- WEC — "blueprint" / fine data grid / monospace ---- */
+body[data-theme="wec"] { --accent: var(--c-yellow); }
+body[data-theme="wec"] .hero-pattern {
+  background:
+    repeating-linear-gradient(0deg, var(--accent) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, var(--accent) 0 1px, transparent 1px 32px);
+  opacity: .09;
+}
+body[data-theme="wec"] .hero-ghost { left: -1%; bottom: -10%; font-size: 20vw; letter-spacing: -.04em; }
+body[data-theme="wec"] .page-hero-tag, body[data-theme="wec"] .breadcrumb { font-family: var(--f-mono); }
+body[data-theme="wec"] .page-hero-title { border-bottom: 2px solid var(--accent); padding-bottom: 14px; display: inline-block; }
+
+/* ---- WRC — "terrain" / crosshatch gravel / rugged stamped text ---- */
+body[data-theme="wrc"] { --accent: var(--c-gray-300); }
+body[data-theme="wrc"] .hero-pattern {
+  background:
+    repeating-linear-gradient(135deg, var(--accent) 0 2px, transparent 2px 20px),
+    repeating-linear-gradient(45deg, var(--accent) 0 2px, transparent 2px 20px);
+  opacity: .07;
+}
+body[data-theme="wrc"] .hero-ghost { right: -3%; bottom: -8%; font-size: 24vw; }
+body[data-theme="wrc"] .page-hero-title { text-shadow: 3px 3px 0 var(--c-yellow); }
+body[data-theme="wrc"] .card, body[data-theme="wrc"] .track-card { clip-path: polygon(0 0, 100% 0, 100% 92%, 92% 100%, 0 100%); }
+
+/* ---- Dakar — "dunes" / warm layered gradients / sunset title ---- */
+body[data-theme="dakar"] { --accent: #e0a83e; }
+body[data-theme="dakar"] .hero-pattern {
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 100%, var(--accent) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 55% 100%, var(--c-red) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 40% at 90% 100%, var(--accent) 0%, transparent 70%);
+  opacity: .22;
+}
+body[data-theme="dakar"] .hero-ghost { left: 50%; bottom: -14%; transform: translateX(-50%); font-size: 20vw; }
+body[data-theme="dakar"] .page-hero-title {
+  background: linear-gradient(100deg, var(--accent), var(--c-red) 60%, var(--c-yellow));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* ---- IndyCar — "bignum" / giant ghost 500 / oval ring ---- */
+body[data-theme="indycar"] { --accent: var(--c-red); }
+body[data-theme="indycar"] .hero-ghost { right: -6%; top: 50%; transform: translateY(-50%); font-size: 34vw; opacity: .9; }
+body[data-theme="indycar"] .hero-pattern::before {
+  content: "";
+  position: absolute; right: 4%; top: 50%; transform: translateY(-50%);
+  width: 46vw; height: 46vw; max-width: 520px; max-height: 520px;
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+  opacity: .18;
+}
+body[data-theme="indycar"] .page-hero-title { font-stretch: condensed; letter-spacing: -.04em; }
+
+/* ---- NASCAR — "checker" / checkerboard strip / blocky ---- */
+body[data-theme="nascar"] { --accent: var(--c-gray-300); }
+body[data-theme="nascar"] .hero-pattern {
+  background-image: conic-gradient(var(--accent) 25%, transparent 0 50%, var(--accent) 0 75%, transparent 0);
+  background-size: 34px 34px;
+  opacity: .1;
+}
+body[data-theme="nascar"] .page-hero-tag {
+  background: var(--c-red);
+  color: var(--c-white);
+  padding: 6px 14px;
+  display: inline-block;
+}
+body[data-theme="nascar"] .page-hero-title { -webkit-text-stroke: 1px var(--c-red); }
+
+/* ---- MotoGP — "speedlines" / diagonal motion blur / lean angle ---- */
+body[data-theme="motogp"] { --accent: var(--c-green); }
+body[data-theme="motogp"] .hero-pattern { background: repeating-linear-gradient(100deg, var(--accent) 0 3px, transparent 3px 46px); opacity: .14; }
+body[data-theme="motogp"] .hero-ghost { right: -4%; bottom: -12%; font-size: 26vw; transform: skewX(-14deg); }
+body[data-theme="motogp"] .page-hero-title { transform: skewX(-6deg); font-style: italic; }
+
+/* ---- DTM — "drafting" / sharp hairline blueprint / precision ---- */
+body[data-theme="dtm"] { --accent: var(--c-white); }
+body[data-theme="dtm"] .hero-pattern {
+  background:
+    repeating-linear-gradient(0deg, var(--accent) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(90deg, var(--accent) 0 1px, transparent 1px 18px);
+  opacity: .045;
+}
+body[data-theme="dtm"] .hero-ghost { left: -2%; top: -6%; font-size: 18vw; -webkit-text-stroke: 1.5px var(--c-red); }
+body[data-theme="dtm"] .page-hero-title { letter-spacing: .02em; border: 1px solid rgba(255,255,255,.15); padding: 10px 18px; display: inline-block; }
+body[data-theme="dtm"] .card, body[data-theme="dtm"] .team-card, body[data-theme="dtm"] .driver-card, body[data-theme="dtm"] .btn { border-radius: 2px; }
+
+/* ---- GT World Challenge — "glass" / premium glassmorphism / soft glow ---- */
+body[data-theme="gt-world-challenge"] { --accent: var(--c-yellow); }
+body[data-theme="gt-world-challenge"] .hero-pattern {
+  background:
+    radial-gradient(circle at 20% 30%, var(--accent) 0%, transparent 45%),
+    radial-gradient(circle at 80% 70%, var(--c-white) 0%, transparent 40%);
+  opacity: .1;
+  filter: blur(30px);
+}
+body[data-theme="gt-world-challenge"] .page-hero-title { font-weight: 900; letter-spacing: -.01em; }
+body[data-theme="gt-world-challenge"] .card, body[data-theme="gt-world-challenge"] .team-card, body[data-theme="gt-world-challenge"] .driver-card {
+  border-radius: 28px;
+  background: rgba(255,255,255,.03);
+  backdrop-filter: blur(10px);
+}
+
+/* Modal media placeholder (image area at top of the modal) */
+.modal-media {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--c-gray-800), var(--c-black-soft));
+}
+.modal-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Sources section, required at the bottom of every content page */
+.sources-section { padding-top: 60px; padding-bottom: 60px; border-top: 1px solid var(--glass-border); }
+.sources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+}
+.sources-list li { }
+.sources-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,.03);
+  font-size: .82rem;
+  color: var(--c-gray-300);
+  transition: border-color .25s, color .25s, transform .25s;
+}
+/* Live F1 standings table (formula1.html only) */
+.f1-standings-table { width: 100%; border-collapse: collapse; min-width: 480px; }
+.f1-standings-table th, .f1-standings-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: .9rem;
+}
+.f1-standings-table th {
+  font-family: var(--f-mono);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: .74rem;
+  color: var(--c-gray-500);
+}
+.f1-standings-table td:first-child { font-family: var(--f-mono); color: var(--c-red); font-weight: 700; }
+
+.sources-list a::before { content: "↗"; font-size: .8rem; }
+.sources-list a:hover { border-color: var(--c-red); color: var(--c-white); transform: translateY(-2px); }
+
+
+/* Highlighted "current season" panel on championship pages */
+.season-panel {
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(232,18,28,.08), rgba(255,212,0,.04));
+  border: 1px solid var(--glass-border);
+}
+.season-panel .badge { margin-bottom: 16px; }
+.season-panel p { color: var(--c-gray-300); font-size: .96rem; margin-bottom: 14px; }
+.season-panel p:last-child { margin-bottom: 0; }
+
+/* Moments grid (legendary moments on championship pages) */
+.moments-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+@media (max-width: 768px) { .moments-grid { grid-template-columns: 1fr; } }
+.moment-card {
+  padding: 24px;
+  border-radius: var(--radius-md);
+  background: var(--c-gray-900);
+  border: 1px solid var(--glass-border);
+}
+.moment-year { font-family: var(--f-mono); color: var(--c-yellow); font-size: .82rem; letter-spacing: .08em; margin-bottom: 8px; }
+.moment-title { font-family: var(--f-display); font-weight: 900; font-size: 1.05rem; text-transform: uppercase; margin-bottom: 8px; }
+.moment-text { color: var(--c-gray-300); font-size: .88rem; }
+
+/* Two-column text block used for history / format / tech sections */
+.text-columns { columns: 1; }
+@media (min-width: 900px) { .text-columns.cols-2 { columns: 2; column-gap: 40px; } }
+.text-columns p { break-inside: avoid; margin-bottom: 16px; color: var(--c-gray-300); font-size: .96rem; }
+
+@media (max-width: 900px) {
+
+  .hero-ghost { display: none; }
+}
+
+/* --------------------------------------------------------------------
+   5) LIGHT ACCENTS FOR THE OTHER SECTION PAGES
+   Keeps drivers / teams / tracks / history / gallery / about from
+   feeling like the exact same template repeated with new text.
+--------------------------------------------------------------------- */
+body[data-theme="drivers"] { --accent: var(--c-yellow); }
+body[data-theme="teams"] { --accent: var(--c-red); }
+body[data-theme="tracks"] { --accent: var(--c-green); }
+body[data-theme="history"] { --accent: var(--c-gray-300); }
+body[data-theme="gallery"] { --accent: var(--c-white); }
+body[data-theme="about"] { --accent: var(--c-yellow); }
+
+/* Decorative diagonal/line background patterns removed from every
+   championship hero — they were covering up the real photos. */
+.hero-pattern { display: none !important; }

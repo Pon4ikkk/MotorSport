@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MotorSport — Портал світового автоспорту: F1, MotoGP, WEC, WRC, NASCAR</title>
+<meta name="description" content="MotorSport — преміальний портал про світовий автоспорт: Формула 1, Formula E, WEC, WRC, Dakar Rally, IndyCar, NASCAR, MotoGP, DTM, GT World Challenge.">
+<meta name="keywords" content="автоспорт, формула 1, motogp, wec, wrc, dakar, nascar, indycar, dtm, gt world challenge, перегони">
+<meta name="author" content="MotorSport">
+<link rel="canonical" href="https://motorsport.example/index.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="MotorSport — Портал світового автоспорту: F1, MotoGP, WEC, WRC, NASCAR">
+<meta property="og:description" content="MotorSport — преміальний портал про світовий автоспорт: Формула 1, Formula E, WEC, WRC, Dakar Rally, IndyCar, NASCAR, MotoGP, DTM, GT World Challenge.">
+<meta property="og:image" content="images/hero/f1-hero.jpg">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:site_name" content="MotorSport">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MotorSport — Портал світового автоспорту: F1, MotoGP, WEC, WRC, NASCAR">
+<meta name="twitter:description" content="MotorSport — преміальний портал про світовий автоспорт: Формула 1, Formula E, WEC, WRC, Dakar Rally, IndyCar, NASCAR, MotoGP, DTM, GT World Challenge.">
+<meta name="twitter:image" content="images/hero/f1-hero.jpg">
+
+<link rel="icon" type="image/svg+xml" href="images/icons/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/themes.css">
+</head>
+<body data-page="home">
+<div id="loader">
+  <div class="loader-mark">MOTOR<span style="color:var(--c-red)">SPORT</span></div>
+  <div class="loader-bar"></div>
+</div>
+<button class="menu-toggle" id="menuToggle" aria-label="Відкрити меню" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+<div class="menu-overlay" id="menuOverlay">
+  <div class="menu-overlay-inner">
+    <a href="index.html" class="menu-brand">MOTOR<span>SPORT</span></a>
+    <nav class="menu-links" id="menuLinks">
+      <a href="index.html" class="active">Головна</a>
+      <a href="pages/formula1.html" class="">Formula 1</a>
+      <a href="pages/formula-e.html" class="">Formula E</a>
+      <a href="pages/wec.html" class="">WEC</a>
+      <a href="pages/wrc.html" class="">WRC</a>
+      <a href="pages/dakar.html" class="">Dakar Rally</a>
+      <a href="pages/indycar.html" class="">IndyCar</a>
+      <a href="pages/nascar.html" class="">NASCAR</a>
+      <a href="pages/motogp.html" class="">MotoGP</a>
+      <a href="pages/dtm.html" class="">DTM</a>
+      <a href="pages/gt-world-challenge.html" class="">GT World Challenge</a>
+      <a href="pages/history.html" class="">Історія</a>
+      <a href="pages/drivers.html" class="">Пілоти</a>
+      <a href="pages/teams.html" class="">Команди</a>
+      <a href="pages/tracks.html" class="">Траси</a>
+      <a href="pages/gallery.html" class="">Галерея</a>
+      <a href="pages/about.html" class="">Про нас</a>
+    </nav>
+  </div>
+</div>
+
+<div id="welcome">
+  <div class="welcome-inner">
+    <div class="welcome-text">Ласкаво просимо</div>
+  </div>
+</div>
+
+<header class="hero">
+  <h1 class="hero-title" style="background-image:url('images/hero/hero-clip.jpg');">MotorSport</h1>
+  <p class="hero-sub">Something more than just racing</p>
+  <p class="hero-sub-uk">Щось більше, ніж просто перегони</p>
+</header>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Закрити">&times;</button>
+    <div class="modal-media" id="modalMedia"></div>
+    <span class="modal-badge" id="modalBadge"></span>
+    <h3 class="modal-title" id="modalTitle"></h3>
+    <p class="modal-subtitle" id="modalSubtitle"></p>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+<button id="backToTop" aria-label="Нагору">↑</button>
+<script src="js/content.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
