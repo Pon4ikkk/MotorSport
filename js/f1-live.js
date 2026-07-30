@@ -1,3 +1,12 @@
+/* ==========================================================================
+   MotorSport — f1-live.js
+   Loaded only on pages/formula1.html. Fetches the current F1 season's
+   driver standings from the free, public Jolpica-F1 API (a maintained
+   successor to the old Ergast API) and renders them into the page.
+   Vanilla JavaScript, no build step, works on GitHub Pages out of the box.
+   If the request fails (e.g. offline, or the API is unreachable), the
+   section quietly falls back to a short message instead of breaking.
+   ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
   var container = document.getElementById("f1LiveStandings");

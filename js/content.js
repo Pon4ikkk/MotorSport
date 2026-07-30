@@ -1,3 +1,11 @@
+/* ==========================================================================
+   MotorSport — content.js
+   Extended information database used by the modal system (see main.js).
+   Every "Детальніше" button on the site opens a modal window and fills it
+   with the data below — this keeps the HTML markup light while still
+   giving visitors a lot to read, exactly as requested: content added
+   dynamically through JavaScript rather than baked into every page.
+   ========================================================================== */
 
 var MODAL_CONTENT = {
 

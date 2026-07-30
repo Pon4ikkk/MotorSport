@@ -1,3 +1,11 @@
+/* ==========================================================================
+   MotorSport — main.js
+   Vanilla JavaScript only. Beginner-friendly, commented, no frameworks.
+   This file powers: loading screen, sticky nav, mobile menu, scroll reveal,
+   animated counters, the drivers slider and the "back to top" button.
+   Every function checks that its elements exist before running, so this
+   single file can be safely included on every page of the site.
+   ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
   initLoader();
@@ -350,7 +358,69 @@ function initModal() {
     return html;
   }
 
-  function openModal(type, slug) {
+  // Track slugs that are on the current F1 calendar — for these we can
+  // pull the fastest lap of the 2026 season live from a public API.
+  // Other tracks (Le Mans, Nürburgring, Daytona, Fuji, Laguna Seca) simply
+  // don't get this block since they aren't F1 circuits.
+  var F1_CIRCUITS = { monza: "monza", spa: "spa", silverstone: "silverstone", monaco: "monaco", suzuka: "suzuka" };
+
+  function loadFastestLap(slug) {
+    var holder = document.getElementById("modalFastestLap");
+    if (!holder) return;
+    var circuitId = F1_CIRCUITS[slug];
+
+    fetch("https://api.jolpi.ca/ergast/f1/2026/circuits/" + circuitId + "/results/")
+      .then(function (r) { if (!r.ok) throw new Error("bad response"); return r.json(); })
+      .then(function (data) {
+        var races = data.MRData.RaceTable.Races;
+        if (!races || !races.length) throw new Error("no race yet");
+        var results = races[races.length - 1].Results;
+        var fastest = results.find(function (r) { return r.FastestLap && r.FastestLap.rank === "1"; });
+        if (!fastest) throw new Error("no fastest lap data");
+        var name = fastest.Driver.givenName + " " + fastest.Driver.familyName;
+        var time = fastest.FastestLap.Time.time;
+        holder.innerHTML =
+          '<div class="modal-lap-box"><span class="modal-lap-label">Найшвидше коло сезону 2026 (дані оновлюються автоматично)</span>' +
+          '<span class="modal-lap-time">' + time + "</span>" +
+          '<span class="modal-lap-driver">' + name + "</span></div>";
+      })
+      .catch(function () {
+        holder.innerHTML =
+          '<p class="section-sub" style="margin-top:14px;">Дані про найшвидше коло 2026 року поки що недоступні (потрібен інтернет або гонка ще не відбулась).</p>';
+      });
+  }
+
+  function buildCarHTML(type, slug, driversNow) {
+    // Only teams have a "latest car/bike" photo. The image is a local
+    // file the site owner adds (images/teams/<slug>-car.jpg) — if it's
+    // missing, the block quietly hides itself instead of showing a
+    // broken image icon.
+    if (type !== "team") return "";
+    var inPages = window.location.pathname.indexOf("/pages/") !== -1;
+    var prefix = inPages ? "../" : "";
+    var src = prefix + "images/teams/" + slug + "-car.jpg";
+    var caption = driversNow ? "<p class=\"modal-car-caption\">Хто наразі виступає за команду: " + driversNow + "</p>" : "";
+    return (
+      '<div class="modal-car">' +
+      '<p style="margin-top:22px;font-weight:700;color:var(--c-white);">Найновіший болід/мотоцикл команди</p>' +
+      '<div class="modal-car-media"><img src="' + src + '" alt="" loading="lazy" ' +
+      'onerror="this.closest(\'.modal-car\').style.display=\'none\'"></div>' +
+      caption +
+      "</div>"
+    );
+  }
+
+  function buildStaticLapHTML(recordTime, recordDriver, recordNote) {
+    if (!recordTime) return "";
+    return (
+      '<div class="modal-lap-box"><span class="modal-lap-label">Рекорд кола траси (актуальний, не оновлюється автоматично)</span>' +
+      '<span class="modal-lap-time">' + recordTime + "</span>" +
+      '<span class="modal-lap-driver">' + recordDriver + (recordNote ? " — " + recordNote : "") + "</span></div>"
+    );
+  }
+
+  function openModal(type, slug, extra) {
+    extra = extra || {};
     if (typeof MODAL_CONTENT === "undefined" || !MODAL_CONTENT[type] || !MODAL_CONTENT[type][slug]) {
       return;
     }
@@ -368,7 +438,19 @@ function initModal() {
     html += buildStatsHTML(data.stats);
     html += buildTimelineHTML(data.stats);
     html += buildFactsHTML(data.facts);
+    html += buildCarHTML(type, slug, extra.driversNow);
+
+    var isLiveTrack = type === "track" && F1_CIRCUITS[slug];
+    if (isLiveTrack) {
+      html += '<div id="modalFastestLap"><p class="section-sub" style="margin-top:14px;">Завантаження даних про коло 2026 року…</p></div>';
+    } else if (type === "track" && extra.recordTime) {
+      html += buildStaticLapHTML(extra.recordTime, extra.recordDriver, extra.recordNote);
+    }
     bodyEl.innerHTML = html;
+
+    if (isLiveTrack) {
+      loadFastestLap(slug);
+    }
 
     lastFocused = document.activeElement;
     overlay.classList.add("open");
@@ -390,7 +472,16 @@ function initModal() {
     var trigger = e.target.closest("[data-modal-type]");
     if (trigger) {
       e.preventDefault();
-      openModal(trigger.getAttribute("data-modal-type"), trigger.getAttribute("data-modal-slug"));
+      openModal(
+        trigger.getAttribute("data-modal-type"),
+        trigger.getAttribute("data-modal-slug"),
+        {
+          driversNow: trigger.getAttribute("data-drivers-now"),
+          recordTime: trigger.getAttribute("data-record-time"),
+          recordDriver: trigger.getAttribute("data-record-driver"),
+          recordNote: trigger.getAttribute("data-record-note")
+        }
+      );
     }
   });
 

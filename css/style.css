@@ -1,3 +1,8 @@
+/* ==========================================================================
+   MotorSport — Design System
+   Dark, premium motorsport aesthetic.
+   Colors: Black / White / Ferrari Red / Racing Yellow / Neon Green / Gray
+   ========================================================================== */
 
 :root {
   /* Core palette */
@@ -535,13 +540,59 @@ section { position: relative; padding: 120px 0; }
 }
 .team-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lift); }
 .team-logo-row { display: flex; align-items: center; justify-content: space-between; }
+.team-mark-wrap { display: flex; align-items: center; justify-content: center; }
 .team-mark {
   width: 56px; height: 56px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--f-display); font-weight: 900; font-size: 1.2rem;
   background: var(--g-red); color: var(--c-white);
 }
+.team-logo-img {
+  width: 56px; height: 56px; border-radius: 14px;
+  object-fit: contain; padding: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--glass-border);
+}
 .team-country { font-family: var(--f-mono); font-size: .72rem; color: var(--c-gray-500); letter-spacing: .1em; }
+
+/* Flag icons — used for both team cards and track cards */
+.flag-group { display: inline-flex; gap: 4px; align-items: center; }
+.flag-icon {
+  width: 24px; height: 18px; object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+.flag-fallback { font-size: .72rem; color: var(--c-gray-500); letter-spacing: .06em; text-transform: uppercase; }
+.track-country-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+
+/* Modal "latest car/bike" block on team modals */
+.modal-car-media {
+  margin-top: 12px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-height: 50vh;
+  background: linear-gradient(135deg, var(--c-gray-800), var(--c-black-soft));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-car-media img { width: 100%; height: auto; max-height: 50vh; object-fit: contain; }
+.modal-car-caption { margin-top: 10px; font-size: .88rem; color: var(--c-gray-300); }
+
+.modal-lap-box {
+  margin-top: 22px;
+  padding: 20px 22px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(232,18,28,.1), rgba(255,212,0,.06));
+  border: 1px solid var(--glass-border);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.modal-lap-label { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--c-gray-300); }
+.modal-lap-time { font-family: var(--f-display); font-weight: 900; font-size: 1.7rem; color: var(--c-yellow); }
+.modal-lap-driver { font-size: .88rem; color: var(--c-white); font-weight: 700; }
+
+.track-country { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .12em; color: var(--c-green); text-transform: uppercase; margin-bottom: 6px; }
 .team-name { font-family: var(--f-display); font-weight: 900; font-size: 1.25rem; text-transform: uppercase; }
 .team-desc { color: var(--c-gray-300); font-size: .9rem; }
 .team-stats { display: flex; gap: 22px; margin-top: 6px; }
@@ -557,7 +608,6 @@ section { position: relative; padding: 120px 0; }
   background: linear-gradient(0deg, rgba(8,9,10,.95) 10%, rgba(8,9,10,.15) 65%);
   display: flex; flex-direction: column; justify-content: flex-end; padding: 22px;
 }
-.track-country { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .12em; color: var(--c-green); text-transform: uppercase; margin-bottom: 6px; }
 .track-name { font-family: var(--f-display); font-weight: 900; font-size: 1.35rem; text-transform: uppercase; }
 .track-meta { display: flex; gap: 14px; margin-top: 10px; font-size: .78rem; color: var(--c-gray-300); }
 
